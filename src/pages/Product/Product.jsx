@@ -14,6 +14,7 @@ const FEATURE_ICONS = ['droplet', 'layers', 'battery-charging', 'gauge']
 export default function Product() {
   const { slug } = useParams()
   const product = getProductBySlug(slug)
+  const allImages = product ? [product.images.hero, ...product.images.gallery] : []
   const [activeThumb, setActiveThumb] = useState(0)
 
   if (!product) return <NotFound />
@@ -26,7 +27,7 @@ export default function Product() {
         <div className="prod-hero-img-wrap">
           <div className="prod-img-arch" />
           <img
-            src={product.images.hero}
+            src={allImages[activeThumb]}
             alt={product.name}
             className="prod-main-img"
           />
@@ -85,7 +86,7 @@ export default function Product() {
       <section className="prod-gallery container">
         <h2 className="prod-gallery-title">معرض المنتجات</h2>
         <div className="prod-thumbs">
-          {product.images.gallery.map((img, i) => (
+          {allImages.map((img, i) => (
             <button
               key={i}
               className={`prod-thumb ${i === activeThumb ? 'active' : ''}`}
