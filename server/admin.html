@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>لوحة الإدارة – راحتي</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', sans-serif; background: #f5f0eb; color: #333; padding: 20px; }
+  h1 { font-size: 22px; margin-bottom: 20px; color: #8B4513; }
+  h2 { font-size: 17px; margin-bottom: 14px; color: #5a3010; }
+  .card { background: white; border-radius: 14px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.07); }
+  .product { margin-bottom: 28px; padding-bottom: 28px; border-bottom: 1px solid #f0e8e0; }
+  .product:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .product-title { font-size: 16px; font-weight: bold; color: #8B4513; margin-bottom: 14px; }
+  .slots { display: flex; flex-wrap: wrap; gap: 12px; }
+  .slot { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .slot label { font-size: 12px; color: #888; }
+  .slot-img { width: 80px; height: 80px; object-fit: cover; border-radius: 10px; border: 2px solid #e0d5c8; background: #f5f0eb; }
+  .slot-img.broken { display: none; }
+  .placeholder-box { width: 80px; height: 80px; border-radius: 10px; border: 2px dashed #c0b0a0; background: #f9f5f0; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #aaa; text-align: center; cursor: pointer; }
+  input[type=file] { display: none; }
+  .upload-btn { font-size: 11px; color: #8B4513; background: #f5ebe0; border: 1px solid #d4a574; padding: 4px 10px; border-radius: 6px; cursor: pointer; text-align: center; }
+  .upload-btn:hover { background: #eddcc8; }
+  .status { font-size: 11px; color: #22a; margin-top: 2px; min-height: 14px; }
+  .orders-btn { display: inline-block; margin-bottom: 14px; background: #8B4513; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: bold; cursor: pointer; border: none; }
+  .orders-btn:hover { background: #7a3a0f; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { background: #f5ebe0; padding: 10px 8px; text-align: right; font-weight: 600; color: #5a3010; }
+  td { padding: 10px 8px; border-bottom: 1px solid #f0e8e0; }
+  tr:last-child td { border-bottom: none; }
+  .empty { text-align: center; color: #aaa; padding: 20px; }
+</style>
+</head>
+<body>
+
+<h1>لوحة الإدارة – راحتي</h1>
+
+<!-- IMAGES SECTION -->
+<div class="card">
+  <h2>رفع صور المنتجات</h2>
+
+  <div class="product">
+    <div class="product-title">منظف المسام</div>
+    <div class="slots" id="slots-pore-cleanser"></div>
+  </div>
+
+  <div class="product">
+    <div class="product-title">فرشاة السيليكون</div>
+    <div class="slots" id="slots-silicone-brush"></div>
+  </div>
+
+  <div class="product">
+    <div class="product-title">جهاز EMS</div>
+    <div class="slots" id="slots-ems-device"></div>
+  </div>
+</div>
+
+<!-- ORDERS SECTION -->
+<div class="card">
+  <h2>الطلبات</h2>
+  <a id="export-btn" class="orders-btn" target="_blank">تصدير Excel</a>
+  <div id="orders-container"><div class="empty">جاري التحميل...</div></div>
+</div>
+
+<script>
+var KEY = new URLSearchParams(location.search).get('key') || ''
+
+var PRODUCTS = [
+  { id: 'pore-cleanser',  slots: ['hero','gallery-1','gallery-2','gallery-3','gallery-4'] },
+  { id: 'silicone-brush', slots: ['hero','gallery-1','gallery-2','gallery-3'] },
+  { id: 'ems-device',     slots: ['hero','gallery-1','gallery-2','gallery-3'] },
+]
+
+PRODUCTS.forEach(function(p) {
+  var container = document.getElementById('slots-' + p.id)
+  p.slots.forEach(function(slot) {
+    var imgSrc = '/media/products/' + p.id + '/' + slot + '.jpeg'
+    var areaId = 'area-' + p.id + '-' + slot
+    var fileId = 'file-' + p.id + '-' + slot
+
+    var div = document.createElement('div')
+    div.className = 'slot'
+
+    div.innerHTML =
+      '<label>' + slot + '</label>' +
+      '<img id="img-' + areaId + '" class="slot-img" src="' + imgSrc + '" onerror="this.className=\'slot-img broken\';document.getElementById(\'ph-' + areaId + '\').style.display=\'flex\'" />' +
+      '<div id="ph-' + areaId + '" class="placeholder-box" style="display:none" onclick="document.getElementById(\'' + fileId + '\').click()">بدون صورة<br/>انقر</div>' +
+      '<label for="' + fileId + '" class="upload-btn">رفع</label>' +
+      '<input type="file" id="' + fileId + '" accept="image/*" onchange="uploadFile(this,\'' + p.id + '\',\'' + slot + '.jpeg\',\'' + areaId + '\')" />' +
+      '<div class="status" id="st-' + areaId + '"></div>'
+
+    container.appendChild(div)
+  })
+})
+
+function uploadFile(input, productId, fileName, areaId) {
+  var file = input.files[0]
+  if (!file) return
+  var st = document.getElementById('st-' + areaId)
+  st.textContent = 'جاري الرفع...'
+  var fd = new FormData()
+  fd.append('file', file)
+  var url = '/api/upload?key=' + KEY + '&folder=products/' + productId + '&name=' + fileName
+  fetch(url, { method: 'POST', body: fd })
+    .then(function(r) { return r.json() })
+    .then(function(data) {
+      if (data.success) {
+        st.textContent = 'تم ✓'
+        var img = document.getElementById('img-' + areaId)
+        img.src = data.path + '?t=' + Date.now()
+        img.className = 'slot-img'
+        document.getElementById('ph-' + areaId).style.display = 'none'
+      } else {
+        st.textContent = 'خطأ'
+      }
+    })
+    .catch(function() { st.textContent = 'فشل الرفع' })
+}
+
+// Set export link
+document.getElementById('export-btn').href = '/api/orders/export?key=' + KEY
+
+// Load orders
+fetch('/api/orders', { headers: { 'x-admin-key': KEY } })
+  .then(function(r) { return r.json() })
+  .then(function(orders) {
+    var c = document.getElementById('orders-container')
+    if (!orders.length) { c.innerHTML = '<div class="empty">لا توجد طلبات بعد</div>'; return }
+    var html = '<table><thead><tr><th>#</th><th>الاسم</th><th>الهاتف</th><th>المدينة</th><th>المنتج</th><th>الكمية</th><th>المجموع</th><th>التاريخ</th></tr></thead><tbody>'
+    orders.forEach(function(o) {
+      html += '<tr><td>' + o.id + '</td><td>' + o.customer_name + '</td><td>' + o.phone + '</td><td>' + o.city + '</td><td>' + o.product_name + '</td><td>' + o.quantity + '</td><td>' + o.total + ' د.م</td><td>' + new Date(o.created_at).toLocaleDateString('ar-MA') + '</td></tr>'
+    })
+    html += '</tbody></table>'
+    c.innerHTML = html
+  })
+  .catch(function() {
+    document.getElementById('orders-container').innerHTML = '<div class="empty">فشل تحميل الطلبات</div>'
+  })
+</script>
+</body>
+</html>
