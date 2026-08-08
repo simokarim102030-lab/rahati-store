@@ -34,6 +34,8 @@
   z-index: 1;
   max-width: 320px;
   width: 100%;
+  height: 280px;
+  object-fit: contain;
   border-radius: 0 !important;
   background: transparent !important;
   box-shadow: none !important;
