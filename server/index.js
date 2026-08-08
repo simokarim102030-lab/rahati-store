@@ -2,6 +2,7 @@ require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const path = require('path')
+const XLSX = require('xlsx')
 const { pool, initDB } = require('./db')
 
 const app = express()
@@ -52,6 +53,41 @@ app.get('/api/orders', async (req, res) => {
     res.json(result.rows)
   } catch (err) {
     res.status(500).json({ error: err.message })
+  }
+})
+
+// Export orders as Excel — /api/orders/export?key=YOUR_ADMIN_KEY
+app.get('/api/orders/export', async (req, res) => {
+  const secret = req.query.key || req.headers['x-admin-key']
+  if (secret !== process.env.ADMIN_KEY) {
+    return res.status(401).send('Unauthorized')
+  }
+  try {
+    const result = await pool.query('SELECT * FROM orders ORDER BY created_at DESC')
+
+    const rows = result.rows.map(o => ({
+      full_name:     o.customer_name,
+      phone:         o.phone,
+      address:       `${o.city} - ${o.address}`,
+      note:          '',
+      delivery_note: '',
+      price:         o.total,
+      sku:           o.product_id,
+      qte:           o.quantity,
+      date_order:    new Date(o.created_at).toLocaleString('fr-MA'),
+    }))
+
+    const ws = XLSX.utils.json_to_sheet(rows)
+    const wb = XLSX.utils.book_new()
+    XLSX.utils.book_append_sheet(wb, ws, 'Orders')
+
+    const buf = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' })
+
+    res.setHeader('Content-Disposition', `attachment; filename="rahati-orders-${Date.now()}.xlsx"`)
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    res.send(buf)
+  } catch (err) {
+    res.status(500).send('Export failed: ' + err.message)
   }
 })
 
