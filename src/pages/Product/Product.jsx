@@ -25,9 +25,9 @@ export default function Product() {
       <section className="prod-hero">
         <div className="prod-hero-img-wrap">
           <div className="prod-img-arch" />
-          <PlaceholderMedia
-            aspectRatio="4/3"
-            label="PRODUCT IMAGE"
+          <img
+            src={product.images.hero}
+            alt={product.name}
             className="prod-main-img"
           />
         </div>
@@ -85,13 +85,13 @@ export default function Product() {
       <section className="prod-gallery container">
         <h2 className="prod-gallery-title">معرض المنتجات</h2>
         <div className="prod-thumbs">
-          {[0, 1, 2, 3].map(i => (
+          {product.images.gallery.map((img, i) => (
             <button
               key={i}
               className={`prod-thumb ${i === activeThumb ? 'active' : ''}`}
               onClick={() => setActiveThumb(i)}
             >
-              <PlaceholderMedia aspectRatio="1/1" label={`${i + 1}`} />
+              <img src={img} alt={`${product.name} ${i + 1}`} style={{width:'100%',height:'100%',objectFit:'cover'}} />
             </button>
           ))}
         </div>

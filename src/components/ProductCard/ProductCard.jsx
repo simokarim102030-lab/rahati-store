@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom'
-import PlaceholderMedia from '../PlaceholderMedia/PlaceholderMedia'
 import './ProductCard.css'
 
 export default function ProductCard({ product }) {
@@ -7,7 +6,7 @@ export default function ProductCard({ product }) {
     <Link to={`/product/${product.slug}`} className="pcard">
       <div className="pcard-img-wrap">
         <div className="pcard-img-bg" />
-        <PlaceholderMedia aspectRatio="1/1" label="PRODUCT IMAGE" className="pcard-img" />
+        <img src={product.images.hero} alt={product.name} className="pcard-img" />
         {product.discount > 0 && (
           <span className="pcard-badge">-{product.discount}%</span>
         )}

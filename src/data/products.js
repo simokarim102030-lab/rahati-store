@@ -19,12 +19,12 @@ export const products = [
     rating: 4.9,
     reviews: 127,
     images: {
-      hero: '/media/products/pore-cleanser/hero.png',
+      hero: '/media/products/pore-cleanser/hero.jpeg',
       gallery: [
-        '/media/products/pore-cleanser/gallery-1.png',
-        '/media/products/pore-cleanser/gallery-2.png',
-        '/media/products/pore-cleanser/gallery-3.png',
-        '/media/products/pore-cleanser/gallery-4.png',
+        '/media/products/pore-cleanser/gallery-1.jpeg',
+        '/media/products/pore-cleanser/gallery-2.jpeg',
+        '/media/products/pore-cleanser/gallery-3.jpeg',
+        '/media/products/pore-cleanser/gallery-4.jpeg',
       ],
     },
     features: [
@@ -74,12 +74,12 @@ export const products = [
     rating: 4.8,
     reviews: 214,
     images: {
-      hero: '/media/products/silicone-brush/hero.png',
+      hero: '/media/products/silicone-brush/hero.jpeg',
       gallery: [
-        '/media/products/silicone-brush/gallery-1.png',
-        '/media/products/silicone-brush/gallery-2.png',
-        '/media/products/silicone-brush/gallery-3.png',
-        '/media/products/silicone-brush/gallery-4.png',
+        '/media/products/silicone-brush/gallery-1.jpeg',
+        '/media/products/silicone-brush/gallery-2.jpeg',
+        '/media/products/silicone-brush/gallery-3.jpeg',
+        '/media/products/silicone-brush/gallery-3.jpeg',
       ],
     },
     features: [
@@ -129,12 +129,12 @@ export const products = [
     rating: 4.9,
     reviews: 189,
     images: {
-      hero: '/media/products/ems-device/hero.png',
+      hero: '/media/products/ems-device/hero.jpeg',
       gallery: [
-        '/media/products/ems-device/gallery-1.png',
-        '/media/products/ems-device/gallery-2.png',
-        '/media/products/ems-device/gallery-3.png',
-        '/media/products/ems-device/gallery-4.png',
+        '/media/products/ems-device/gallery-1.jpeg',
+        '/media/products/ems-device/gallery-2.jpeg',
+        '/media/products/ems-device/gallery-3.jpeg',
+        '/media/products/ems-device/gallery-3.jpeg',
       ],
     },
     features: [
