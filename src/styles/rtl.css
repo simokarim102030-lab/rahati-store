@@ -1,0 +1,6 @@
+[dir="rtl"] {
+  text-align: right;
+}
+[dir="rtl"] .icon-flip {
+  transform: scaleX(-1);
+}

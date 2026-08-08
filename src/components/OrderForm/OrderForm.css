@@ -1,0 +1,117 @@
+.order-form {
+  background: var(--white);
+  border-radius: 24px;
+  padding: 28px 24px;
+  box-shadow: 0 4px 24px rgba(80,55,35,0.07);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.order-form-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text);
+  text-align: center;
+  margin-bottom: 4px;
+}
+.of-group {
+  position: relative;
+}
+.of-group input,
+.of-group select {
+  width: 100%;
+  background: var(--light-cream);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 16px 18px;
+  font-size: 15px;
+  color: var(--text);
+  font-family: 'Cairo', sans-serif;
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+  appearance: none;
+  -webkit-appearance: none;
+}
+.of-group input:focus,
+.of-group select:focus {
+  outline: none;
+  border-color: var(--primary);
+  background: white;
+}
+.of-group.error input,
+.of-group.error select {
+  border-color: var(--error);
+}
+.of-select-wrap {
+  position: relative;
+}
+.of-chevron {
+  position: absolute;
+  top: 50%;
+  left: 16px;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+  pointer-events: none;
+}
+.of-err {
+  font-size: 12px;
+  color: var(--error);
+  margin-top: 4px;
+  display: block;
+}
+.of-qty-row {
+  display: flex;
+  justify-content: center;
+  padding: 4px 0;
+}
+.of-summary {
+  background: var(--light-cream);
+  border-radius: 14px;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.of-summary-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 15px;
+  color: var(--text-secondary);
+}
+.of-summary-row.total {
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+  font-weight: 700;
+  color: var(--text);
+  font-size: 16px;
+}
+.of-total {
+  color: var(--primary);
+  font-size: 20px;
+  font-weight: 800;
+}
+.of-submit {
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 40px;
+  padding: 18px;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: 'Cairo', sans-serif;
+  cursor: pointer;
+  width: 100%;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+.of-submit:hover:not(:disabled) {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+}
+.of-submit:disabled { opacity: 0.7; cursor: not-allowed; }
+.of-cod-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}

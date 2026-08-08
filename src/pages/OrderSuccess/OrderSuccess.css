@@ -1,0 +1,83 @@
+.success-page {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  background: var(--background);
+  padding: 48px 0;
+}
+.success-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  text-align: center;
+  max-width: 440px;
+  margin: 0 auto;
+}
+.success-check {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 30px rgba(166,106,37,0.35);
+}
+.success-title {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.3;
+}
+.success-msg {
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  max-width: 320px;
+}
+.success-order-card {
+  background: var(--white);
+  border-radius: 18px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 4px 20px rgba(80,55,35,0.07);
+  width: 100%;
+  text-align: right;
+}
+.soc-info { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+.soc-name { font-size: 15px; font-weight: 700; color: var(--text); }
+.soc-qty { font-size: 13px; color: var(--text-secondary); }
+.soc-price { font-size: 20px; font-weight: 800; color: var(--primary); }
+.soc-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 12px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--light-cream);
+}
+.soc-img .placeholder-media { border-radius: 0; min-height: unset; height: 100%; }
+.success-btn {
+  display: block;
+  width: 100%;
+  border: 2px solid var(--primary);
+  color: var(--primary);
+  font-size: 16px;
+  font-weight: 700;
+  padding: 16px;
+  border-radius: 40px;
+  text-align: center;
+  transition: all var(--transition-fast);
+  font-family: 'Cairo', sans-serif;
+}
+.success-btn:hover { background: var(--primary); color: white; }
+.success-home-link {
+  font-size: 14px;
+  color: var(--text-secondary);
+  transition: color var(--transition-fast);
+}
+.success-home-link:hover { color: var(--primary); }

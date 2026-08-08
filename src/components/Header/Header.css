@@ -1,0 +1,109 @@
+.header {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  flex-direction: row-reverse; /* RTL: logo right, cart left */
+}
+.header-logo {
+  font-size: 22px;
+  font-weight: 300;
+  color: var(--text);
+  letter-spacing: 5px;
+  font-family: 'Cairo', sans-serif;
+  text-transform: uppercase;
+  transition: color var(--transition-fast);
+}
+.header-logo:hover { color: var(--primary); }
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.header-cart {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.cart-circle {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #C49A52 0%, #8D6030 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  transition: opacity var(--transition-fast);
+}
+.cart-circle:hover { opacity: 0.85; }
+.cart-count {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: var(--error);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.header-lang {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  letter-spacing: 1px;
+}
+.header-menu-btn {
+  display: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+}
+.header-mobile-nav {
+  background: var(--white);
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+}
+.mobile-nav-item {
+  padding: 16px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+  transition: color var(--transition-fast), background var(--transition-fast);
+}
+.mobile-nav-item:hover {
+  color: var(--primary);
+  background: var(--light-cream);
+}
+
+/* Desktop: show full nav */
+@media (min-width: 769px) {
+  .header-menu-btn { display: none; }
+  .header-inner { flex-direction: row; }
+  .header-left { order: -1; } /* left side in LTR physical */
+  .header-logo { order: 0; }
+}
+@media (max-width: 768px) {
+  .header-menu-btn { display: flex; }
+}
