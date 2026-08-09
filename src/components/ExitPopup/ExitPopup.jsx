@@ -8,26 +8,31 @@ export default function ExitPopup({ product, onAccept, onClose }) {
     const key = 'exit_shown_' + product.id
     if (sessionStorage.getItem(key)) return
 
-    const handleMouseLeave = (e) => {
-      if (e.clientY <= 10) {
-        sessionStorage.setItem(key, '1')
-        setVisible(true)
-      }
+    // Only allow popup after user has been on page for at least 8 seconds
+    let readyToShow = false
+    const readyTimer = setTimeout(() => { readyToShow = true }, 8000)
+
+    const show = () => {
+      if (!readyToShow) return
+      if (sessionStorage.getItem(key)) return
+      sessionStorage.setItem(key, '1')
+      setVisible(true)
     }
 
-    // Mobile: trigger when page is hidden (user switches tab/app)
+    // Desktop: mouse moves toward top of browser (back button / tab bar)
+    const handleMouseLeave = (e) => {
+      if (e.clientY <= 10) show()
+    }
+
+    // Mobile: user switches to another app or tab
     const handleVisibility = () => {
-      if (document.visibilityState === 'hidden') {
-        if (!sessionStorage.getItem(key)) {
-          sessionStorage.setItem(key, '1')
-          setVisible(true)
-        }
-      }
+      if (document.visibilityState === 'hidden') show()
     }
 
     document.addEventListener('mouseleave', handleMouseLeave)
     document.addEventListener('visibilitychange', handleVisibility)
     return () => {
+      clearTimeout(readyTimer)
       document.removeEventListener('mouseleave', handleMouseLeave)
       document.removeEventListener('visibilitychange', handleVisibility)
     }
