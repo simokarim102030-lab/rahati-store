@@ -7,6 +7,7 @@ import TrustBar from '../../components/TrustBar/TrustBar'
 import OrderForm from '../../components/OrderForm/OrderForm'
 import ExitPopup from '../../components/ExitPopup/ExitPopup'
 import NotFound from '../NotFound/NotFound'
+import { trackViewContent } from '../../utils/pixel'
 import './Product.css'
 
 const FEATURE_ICONS = ['droplet', 'layers', 'battery-charging', 'gauge']
@@ -20,6 +21,8 @@ export default function Product() {
   const [exitPrice, setExitPrice] = useState(null)
   const [formStarted, setFormStarted] = useState(false)
   const orderFormRef = useRef(null)
+
+  useEffect(() => { if (product) trackViewContent(product) }, [product?.id])
   const timerRef = useRef(null)
   const touchStartX = useRef(null)
 

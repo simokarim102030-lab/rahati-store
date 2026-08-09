@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { ChevronDown, Lock } from 'lucide-react'
 import { moroccanCities } from '../../data/products'
 import QuantitySelector from '../QuantitySelector/QuantitySelector'
+import { trackInitiateCheckout, trackPurchase } from '../../utils/pixel'
 import './OrderForm.css'
 
 export default function OrderForm({ product, overridePrice, onFirstInput }) {
@@ -38,6 +39,7 @@ export default function OrderForm({ product, overridePrice, onFirstInput }) {
     const errs = validate()
     if (Object.keys(errs).length) { setErrors(errs); return }
     setSubmitting(true)
+    trackInitiateCheckout(product, qty, unitPrice * qty)
 
     try {
       await fetch('/api/orders', {
@@ -59,6 +61,7 @@ export default function OrderForm({ product, overridePrice, onFirstInput }) {
       // navigate to success regardless — order may still have saved
     }
 
+    trackPurchase(product, qty, unitPrice * qty)
     navigate('/order-success', { state: { product, qty, total: unitPrice * qty } })
   }
 
