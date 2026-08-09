@@ -27,7 +27,7 @@ export default function ExitPopup({ product, onAccept, onClose, formStarted }) {
     // Inactivity: if customer hasn't touched the form after 15 seconds, show offer
     const inactivityTimer = setTimeout(() => {
       if (!formStarted) show()
-    }, 15000)
+    }, 8000)
 
     document.addEventListener('mouseleave', handleMouseLeave)
     document.addEventListener('visibilitychange', handleVisibility)
