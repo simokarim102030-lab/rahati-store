@@ -18,6 +18,7 @@ export default function Product() {
   const allImages = product ? [product.images.hero, ...product.images.gallery] : []
   const [activeThumb, setActiveThumb] = useState(0)
   const [exitPrice, setExitPrice] = useState(null)
+  const [formStarted, setFormStarted] = useState(false)
   const orderFormRef = useRef(null)
   const timerRef = useRef(null)
   const touchStartX = useRef(null)
@@ -185,7 +186,7 @@ export default function Product() {
 
       {/* ── ORDER FORM ── */}
       <section id="order-form" className="prod-order container">
-        <OrderForm product={product} overridePrice={exitPrice} />
+        <OrderForm product={product} overridePrice={exitPrice} onFirstInput={() => setFormStarted(true)} />
       </section>
 
       <TrustBar />
@@ -193,6 +194,7 @@ export default function Product() {
       {product.exitPrice && (
         <ExitPopup
           product={product}
+          formStarted={formStarted}
           onAccept={(price) => {
             setExitPrice(price)
             document.getElementById('order-form')?.scrollIntoView({ behavior: 'smooth' })

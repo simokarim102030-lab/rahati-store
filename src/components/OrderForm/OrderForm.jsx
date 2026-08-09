@@ -1,14 +1,15 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ChevronDown, Lock } from 'lucide-react'
 import { moroccanCities } from '../../data/products'
 import QuantitySelector from '../QuantitySelector/QuantitySelector'
 import './OrderForm.css'
 
-export default function OrderForm({ product, overridePrice }) {
+export default function OrderForm({ product, overridePrice, onFirstInput }) {
   const navigate = useNavigate()
   const [qty, setQty] = useState(1)
   const unitPrice = overridePrice || product.price
+  const firstInputFired = useRef(false)
   const [form, setForm] = useState({ name: '', phone: '', city: '', address: '' })
   const [errors, setErrors] = useState({})
   const [submitting, setSubmitting] = useState(false)
@@ -17,6 +18,10 @@ export default function OrderForm({ product, overridePrice }) {
     const { name, value } = e.target
     setForm(p => ({ ...p, [name]: value }))
     if (errors[name]) setErrors(p => ({ ...p, [name]: '' }))
+    if (!firstInputFired.current && onFirstInput) {
+      firstInputFired.current = true
+      onFirstInput()
+    }
   }
 
   const validate = () => {

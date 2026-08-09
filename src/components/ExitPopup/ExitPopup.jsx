@@ -1,19 +1,14 @@
 import { useEffect, useState } from 'react'
 import './ExitPopup.css'
 
-export default function ExitPopup({ product, onAccept, onClose }) {
+export default function ExitPopup({ product, onAccept, onClose, formStarted }) {
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
     const key = 'exit_shown_' + product.id
     if (sessionStorage.getItem(key)) return
 
-    // Only allow popup after user has been on page for at least 8 seconds
-    let readyToShow = false
-    const readyTimer = setTimeout(() => { readyToShow = true }, 8000)
-
     const show = () => {
-      if (!readyToShow) return
       if (sessionStorage.getItem(key)) return
       sessionStorage.setItem(key, '1')
       setVisible(true)
@@ -29,14 +24,19 @@ export default function ExitPopup({ product, onAccept, onClose }) {
       if (document.visibilityState === 'hidden') show()
     }
 
+    // Inactivity: if customer hasn't touched the form after 15 seconds, show offer
+    const inactivityTimer = setTimeout(() => {
+      if (!formStarted) show()
+    }, 15000)
+
     document.addEventListener('mouseleave', handleMouseLeave)
     document.addEventListener('visibilitychange', handleVisibility)
     return () => {
-      clearTimeout(readyTimer)
+      clearTimeout(inactivityTimer)
       document.removeEventListener('mouseleave', handleMouseLeave)
       document.removeEventListener('visibilitychange', handleVisibility)
     }
-  }, [product.id])
+  }, [product.id, formStarted])
 
   const handleAccept = () => {
     setVisible(false)
