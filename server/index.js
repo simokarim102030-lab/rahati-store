@@ -5,7 +5,50 @@ const path = require('path')
 const fs = require('fs')
 const multer = require('multer')
 const XLSX = require('xlsx')
+const nodemailer = require('nodemailer')
 const { pool, initDB } = require('./db')
+
+const mailer = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_PASS,
+  },
+})
+
+async function sendOrderEmail(order) {
+  if (!process.env.GMAIL_USER || !process.env.GMAIL_PASS) return
+  try {
+    await mailer.sendMail({
+      from: `"RAHATI Store" <${process.env.GMAIL_USER}>`,
+      to: process.env.GMAIL_USER,
+      subject: `🛍️ طلب جديد — ${order.productName} — ${order.total} د.م`,
+      html: `
+        <div dir="rtl" style="font-family:Arial;max-width:500px;margin:auto;border:1px solid #e0d5c8;border-radius:12px;overflow:hidden">
+          <div style="background:#8B4513;padding:20px;text-align:center">
+            <h1 style="color:white;margin:0;font-size:22px">RAHATI — طلب جديد 🎉</h1>
+          </div>
+          <div style="padding:24px;background:#fff">
+            <table width="100%" cellpadding="8" style="border-collapse:collapse;font-size:15px">
+              <tr><td style="color:#888">الاسم</td><td style="font-weight:bold">${order.customerName}</td></tr>
+              <tr style="background:#faf7f4"><td style="color:#888">الهاتف</td><td style="font-weight:bold">${order.phone}</td></tr>
+              <tr><td style="color:#888">المدينة</td><td>${order.city}</td></tr>
+              <tr style="background:#faf7f4"><td style="color:#888">العنوان</td><td>${order.address}</td></tr>
+              <tr><td style="color:#888">المنتج</td><td>${order.productName}</td></tr>
+              <tr style="background:#faf7f4"><td style="color:#888">الكمية</td><td>${order.quantity}</td></tr>
+              <tr><td style="color:#888">المجموع</td><td style="font-weight:bold;color:#8B4513;font-size:18px">${order.total} د.م</td></tr>
+            </table>
+          </div>
+          <div style="background:#faf7f4;padding:14px;text-align:center;font-size:12px;color:#aaa">
+            الدفع عند الاستلام — RAHATI Store
+          </div>
+        </div>
+      `,
+    })
+  } catch (err) {
+    console.error('Email error:', err.message)
+  }
+}
 
 const app = express()
 
@@ -43,6 +86,7 @@ app.post('/api/orders', async function (req, res) {
       'INSERT INTO orders (customer_name, phone, city, address, product_id, product_name, quantity, unit_price, total) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING id, created_at',
       [customerName, phone, city, address, productId, productName, quantity, unitPrice, total]
     )
+    sendOrderEmail({ customerName, phone, city, address, productName, quantity, total })
     res.json({ success: true, orderId: result.rows[0].id })
   } catch (err) {
     console.error('Order save error:', err.message)
