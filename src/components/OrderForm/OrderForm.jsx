@@ -5,9 +5,10 @@ import { moroccanCities } from '../../data/products'
 import QuantitySelector from '../QuantitySelector/QuantitySelector'
 import './OrderForm.css'
 
-export default function OrderForm({ product }) {
+export default function OrderForm({ product, overridePrice }) {
   const navigate = useNavigate()
   const [qty, setQty] = useState(1)
+  const unitPrice = overridePrice || product.price
   const [form, setForm] = useState({ name: '', phone: '', city: '', address: '' })
   const [errors, setErrors] = useState({})
   const [submitting, setSubmitting] = useState(false)
@@ -45,15 +46,15 @@ export default function OrderForm({ product }) {
           productId: product.id,
           productName: product.name,
           quantity: qty,
-          unitPrice: product.price,
-          total: product.price * qty,
+          unitPrice: unitPrice,
+          total: unitPrice * qty,
         }),
       })
     } catch (_) {
       // navigate to success regardless — order may still have saved
     }
 
-    navigate('/order-success', { state: { product, qty, total: product.price * qty } })
+    navigate('/order-success', { state: { product, qty, total: unitPrice * qty } })
   }
 
   return (
@@ -102,13 +103,21 @@ export default function OrderForm({ product }) {
       </div>
 
       <div className="of-summary">
+        {overridePrice && (
+          <div className="of-exit-badge">سعر خاص تم تطبيقه ✓</div>
+        )}
         <div className="of-summary-row">
           <span>السعر الواحد</span>
-          <span>{product.price} {product.currency}</span>
+          <span>
+            {overridePrice && (
+              <s style={{color:'var(--text-secondary)',marginLeft:'8px',fontSize:'13px'}}>{product.price} {product.currency}</s>
+            )}
+            {unitPrice} {product.currency}
+          </span>
         </div>
         <div className="of-summary-row total">
           <span>المجموع</span>
-          <span className="of-total">{product.price * qty} {product.currency}</span>
+          <span className="of-total">{unitPrice * qty} {product.currency}</span>
         </div>
       </div>
 

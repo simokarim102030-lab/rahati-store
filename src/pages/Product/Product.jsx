@@ -5,6 +5,7 @@ import { getProductBySlug } from '../../data/products'
 import FeatureCard from '../../components/FeatureCard/FeatureCard'
 import TrustBar from '../../components/TrustBar/TrustBar'
 import OrderForm from '../../components/OrderForm/OrderForm'
+import ExitPopup from '../../components/ExitPopup/ExitPopup'
 import NotFound from '../NotFound/NotFound'
 import './Product.css'
 
@@ -16,6 +17,8 @@ export default function Product() {
   const product = getProductBySlug(slug)
   const allImages = product ? [product.images.hero, ...product.images.gallery] : []
   const [activeThumb, setActiveThumb] = useState(0)
+  const [exitPrice, setExitPrice] = useState(null)
+  const orderFormRef = useRef(null)
   const timerRef = useRef(null)
   const touchStartX = useRef(null)
 
@@ -182,10 +185,21 @@ export default function Product() {
 
       {/* ── ORDER FORM ── */}
       <section id="order-form" className="prod-order container">
-        <OrderForm product={product} />
+        <OrderForm product={product} overridePrice={exitPrice} />
       </section>
 
       <TrustBar />
+
+      {product.exitPrice && (
+        <ExitPopup
+          product={product}
+          onAccept={(price) => {
+            setExitPrice(price)
+            document.getElementById('order-form')?.scrollIntoView({ behavior: 'smooth' })
+          }}
+          onClose={() => {}}
+        />
+      )}
     </div>
   )
 }

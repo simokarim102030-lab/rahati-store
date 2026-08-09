@@ -1,3 +1,14 @@
+.of-exit-badge {
+  background: var(--success-light);
+  color: var(--success);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 8px 14px;
+  border-radius: 10px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
 .order-form {
   background: var(--white);
   border-radius: 24px;
