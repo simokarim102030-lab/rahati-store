@@ -1,4 +1,5 @@
 import { useLocation, Link } from 'react-router-dom'
+import { useEffect } from 'react'
 import { Check } from 'lucide-react'
 import PlaceholderMedia from '../../components/PlaceholderMedia/PlaceholderMedia'
 import './OrderSuccess.css'
@@ -8,6 +9,18 @@ export default function OrderSuccess() {
   const product = state?.product
   const qty = state?.qty || 1
   const total = state?.total
+
+  useEffect(() => {
+    if (typeof fbq !== 'undefined' && product) {
+      fbq('track', 'Purchase', {
+        value: total || product.price * qty,
+        currency: 'MAD',
+        content_name: product.name,
+        content_ids: [product.id],
+        num_items: qty,
+      })
+    }
+  }, [])
 
   return (
     <div className="success-page">
